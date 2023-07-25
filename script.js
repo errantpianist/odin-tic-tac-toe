@@ -42,6 +42,7 @@ const gameController = (() => {
   const getCurrentPlayer = () => currentPlayer;
   const switchPlayer = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
+    document.querySelector("#turn").classList = currentPlayer.getMarker();
   };
   const play = (index) => {
     if (Gameboard.getBoard()[index] !== "") return;
