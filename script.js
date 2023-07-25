@@ -41,10 +41,23 @@ const gameController = (() => {
   let currentPlayer = player1;
   const getCurrentPlayer = () => currentPlayer;
   const switchPlayer = () => {
-    currentPlayer = currentPlayer === player1 ? player2 : player1;
-    document.querySelector("#turn").classList = currentPlayer.getMarker();
+    let winner = checkWinner() || null;
+    if (winner) {
+      if (winner === "tie") {
+        document.querySelector("#turn").textContent = "It's a tie!";
+      } else {
+        document.querySelector("#turn").textContent = `Player ${
+          winner === "X" ? 1 : 2
+        } wins!`;
+        document.querySelector("#turn").classList = "win";
+      }
+    } else {
+      currentPlayer = currentPlayer === player1 ? player2 : player1;
+      document.querySelector("#turn").classList = currentPlayer.getMarker();
+    }
   };
   const play = (index) => {
+    if (checkWinner()) return;
     if (Gameboard.getBoard()[index] !== "") return;
     Gameboard.setBoard(index, currentPlayer.getMarker());
     switchPlayer();
@@ -64,17 +77,14 @@ const gameController = (() => {
       [0, 4, 8], // left diagonal
       [2, 4, 6], // right diagonal
     ];
-    winningCombos.forEach((combo) => {
-      if (
-        board[combo[0]] !== "" &&
-        board[combo[0]] === board[combo[1]] &&
-        board[combo[1]] === board[combo[2]]
-      ) {
-        return board[combo[0]];
-      } else if (!board.includes("")) {
-        return "tie";
+    for (const combo of winningCombos) {
+      const [a, b, c] = combo;
+      if (board[a] !== "" && board[a] === board[b] && board[b] === board[c]) {
+        return board[a];
       }
-    });
+    }
+    if (!board.includes("")) return "tie";
+
     return null;
   };
 
