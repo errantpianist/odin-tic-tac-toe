@@ -1,11 +1,11 @@
 const Gameboard = (() => {
-  let board = ["", "O", "X", "O", "X", "O", "X", "O", "X"];
+  let board = ["", "", "", "", "", "", "", "", ""];
   const getBoard = () => board;
   const setBoard = (index, value) => {
     board[index] = value;
   };
   const resetBoard = () => {
-    board = ["", "", "", "", "", "", "", "", ""];
+    board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
   };
   return { getBoard, setBoard, resetBoard };
 })();
@@ -94,6 +94,8 @@ playerInputs.forEach((input) => {
           .classList.remove("hidden");
         if (e.target.id === "player1") {
           document.querySelector("#player2").focus();
+        } else {
+          document.querySelector(".board").classList.remove("hidden");
         }
       }
     }
