@@ -5,7 +5,7 @@ const Gameboard = (() => {
     board[index] = value;
   };
   const resetBoard = () => {
-    board = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    board = ["", "", "", "", "", "", "", "", ""];
   };
   return { getBoard, setBoard, resetBoard };
 })();
@@ -26,6 +26,7 @@ const displayController = (() => {
       square.setAttribute("data-index", index);
       square.textContent = element;
       square.addEventListener("click", (e) => {
+        console.log(e.target.dataset.index);
         gameController.play(e.target.dataset.index);
         renderBoard(Gameboard.getBoard());
       });
@@ -45,12 +46,21 @@ const gameController = (() => {
     if (winner) {
       if (winner === "tie") {
         document.querySelector("#turn").textContent = "It's a tie!";
+        document.querySelector("#turn").classList = "tie";
       } else {
         document.querySelector("#turn").textContent = `Player ${
           winner === "X" ? 1 : 2
         } wins!`;
         document.querySelector("#turn").classList = "win";
       }
+      const resetButton = document.createElement("button");
+      resetButton.textContent = "Play again?";
+      resetButton.classList = "reset";
+      resetButton.addEventListener("click", (e) => {
+        e.target.remove();
+        reset();
+      });
+      document.querySelector("#turn").appendChild(resetButton);
     } else {
       currentPlayer = currentPlayer === player1 ? player2 : player1;
       document.querySelector("#turn").classList = currentPlayer.getMarker();
@@ -64,6 +74,10 @@ const gameController = (() => {
   };
   const reset = () => {
     Gameboard.resetBoard();
+    displayController.renderBoard(Gameboard.getBoard());
+    currentPlayer = player1;
+    document.getElementById("turn").classList = "X";
+    document.getElementById("turn").textContent = "";
   };
   const checkWinner = () => {
     const board = Gameboard.getBoard();
