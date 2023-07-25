@@ -1,5 +1,5 @@
 const Gameboard = (() => {
-  let board = ["X", "O", "X", "O", "X", "O", "X", "O", "X"];
+  let board = ["", "O", "X", "O", "X", "O", "X", "O", "X"];
   const getBoard = () => board;
   const setBoard = (index, value) => {
     board[index] = value;
@@ -44,6 +44,7 @@ const gameController = (() => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
   const play = (index) => {
+    if (Gameboard.getBoard()[index] !== "") return;
     Gameboard.setBoard(index, currentPlayer.getMarker());
     switchPlayer();
   };
